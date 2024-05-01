@@ -27,7 +27,7 @@ const PlayerScore: React.FunctionComponent<PlayerScoreProps> = ({
         <input
           type="text"
           value={playerScoreState.name}
-          className="bg-black text-center"
+          className="bg-black text-center w-full h-full"
           onChange={(e) =>
             dispatch({
               type: ScoreActionType.CHANGE_PLAYER1_NAME,
