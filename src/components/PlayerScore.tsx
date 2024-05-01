@@ -21,6 +21,10 @@ const PlayerScore: React.FunctionComponent<PlayerScoreProps> = ({
   dispatch,
 }) => {
   const isMyServer = player === serverPlayer;
+  const playerNameTypeDispatch =
+    player === "player1"
+      ? ScoreActionType.CHANGE_PLAYER1_NAME
+      : ScoreActionType.CHANGE_PLAYER2_NAME;
   return (
     <div className="flex flex-col place-items-center">
       <div className="py-5 text-4xl">
@@ -30,7 +34,7 @@ const PlayerScore: React.FunctionComponent<PlayerScoreProps> = ({
           className="bg-black text-center w-full h-full"
           onChange={(e) =>
             dispatch({
-              type: ScoreActionType.CHANGE_PLAYER1_NAME,
+              type: playerNameTypeDispatch,
               payload: e.target.value,
             })
           }
