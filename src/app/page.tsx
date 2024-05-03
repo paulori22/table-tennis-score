@@ -1,9 +1,12 @@
 "use client";
 
 import PlayerScore from "@/components/PlayerScore";
+import PopUpModal from "@/components/PopModal";
+import SetsHistory from "@/components/SetsHistory";
+import useModal from "@/hooks/useModal";
 import { INITIAL_SCORE_STATE, ScoreActionType, scoreReducer } from "@/store";
-import { whoWillServe } from "@/util";
-import { useReducer } from "react";
+import { whoWillServe, whoWonSet } from "@/util";
+import { useEffect, useReducer } from "react";
 
 export default function Home() {
   const [state, dispatch] = useReducer(scoreReducer, INITIAL_SCORE_STATE);
@@ -12,6 +15,20 @@ export default function Home() {
     state.player2.currentPoints,
     state.startedServing
   );
+  const wonSetPlayer = whoWonSet(
+    state.player1.currentPoints,
+    state.player2.currentPoints
+  );
+  const modal = useModal();
+
+  useEffect(() => {
+    if (wonSetPlayer !== null) {
+      modal.handleOpenModal();
+    }
+  }, [wonSetPlayer, modal]);
+
+  console.log(state);
+
   return (
     <main>
       <div className="grid grid-cols-2 justify-items-center gap-2">
@@ -28,45 +45,19 @@ export default function Home() {
           serverPlayer={serverPlayer}
         />
       </div>
-      <div className="grid grid-cols-2 justify-items-center gap-2">
-        <div className="flex flex-col gap-2">
-          <button
-            className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-            onClick={() =>
-              dispatch({ type: ScoreActionType.INCREASE_PLAYER1_POINTS_BY_1 })
-            }
-          >
-            Add Score +
-          </button>
-          <button
-            className="rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700"
-            onClick={() =>
-              dispatch({ type: ScoreActionType.DECREASE_PLAYER1_POINTS_BY_1 })
-            }
-          >
-            Remove Score -
-          </button>
-        </div>
-        <div className="flex flex-col gap-2">
-          <button
-            className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-            onClick={() =>
-              dispatch({ type: ScoreActionType.INCREASE_PLAYER2_POINTS_BY_1 })
-            }
-          >
-            Add Score +
-          </button>
-
-          <button
-            className="rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700"
-            onClick={() =>
-              dispatch({ type: ScoreActionType.DECREASE_PLAYER2_POINTS_BY_1 })
-            }
-          >
-            Remove Score -
-          </button>
-        </div>
-      </div>
+      <SetsHistory sets={state.sets} />
+      <PopUpModal
+        {...modal}
+        message="Você tem certeza que deseja finalizar o set?"
+        confirmationButton={{
+          text: "Sim",
+          onClick: () => {
+            dispatch({ type: ScoreActionType.END_SET });
+            modal.handleCloseModal();
+          },
+        }}
+        cancelButton={{ text: "Não" }}
+      />
     </main>
   );
 }

@@ -18,3 +18,15 @@ export function whoWillServe(
     return startedServing === "player1" ? "player2" : "player1";
   }
 }
+
+export function whoWonSet(player1Points: number, player2Points: number) {
+  if (player1Points >= 11 && player1Points - player2Points >= 2) {
+    return "player1";
+  }
+
+  if (player2Points >= 11 && player2Points - player1Points >= 2) {
+    return "player2";
+  }
+
+  return null;
+}

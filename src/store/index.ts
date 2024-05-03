@@ -1,33 +1,39 @@
+import { whoWonSet } from "@/util";
+
 export enum ScoreActionType {
-  INCREASE_PLAYER1_POINTS_BY_1 = "INCREASE_PLAYER1_POINTS_BY_1",
-  DECREASE_PLAYER1_POINTS_BY_1 = "DECREASE_PLAYER1_POINTS_BY_1",
-  CHANGE_PLAYER1_NAME = "CHANGE_PLAYER1_NAME",
-  INCREASE_PLAYER2_POINTS_BY_1 = "INCREASE_PLAYER2_POINTS_BY_1",
-  DECREASE_PLAYER2_POINTS_BY_1 = "DECREASE_PLAYER2_POINTS_BY_1",
-  CHANGE_PLAYER2_NAME = "CHANGE_PLAYER2_NAME",
+  INCREASE_PLAYER_POINTS_BY_1 = "INCREASE_PLAYER_POINTS_BY_1",
+  DECREASE_PLAYER_POINTS_BY_1 = "DECREASE_PLAYER_POINTS_BY_1",
+  CHANGE_PLAYER_NAME = "CHANGE_PLAYER_NAME",
+  END_SET = "END_SET",
 }
 
-export interface ScoreAction {
-  type: ScoreActionType;
-  payload?: any;
-}
+export type ScoreAction =
+  | {
+      type: ScoreActionType.INCREASE_PLAYER_POINTS_BY_1;
+      payload: { player: PlayerIdentifierType };
+    }
+  | {
+      type: ScoreActionType.DECREASE_PLAYER_POINTS_BY_1;
+      payload: { player: PlayerIdentifierType };
+    }
+  | {
+      type: ScoreActionType.CHANGE_PLAYER_NAME;
+      payload: { player: PlayerIdentifierType; name: string };
+    }
+  | {
+      type: ScoreActionType.END_SET;
+    };
 
 export interface PlayerScore {
   name: string;
   wonSets: number;
   currentPoints: number;
 }
-
-interface SetType {
-  player1Points: number;
-  player2Points: number;
-  currentPoints: number;
-}
-
+export type Set = [number, number];
 export interface ScoreState {
   player1: PlayerScore;
   player2: PlayerScore;
-  sets: SetType[];
+  sets: Set[];
   startedServing: PlayerIdentifierType;
 }
 
@@ -52,57 +58,74 @@ export function scoreReducer(
   state: ScoreState,
   action: ScoreAction
 ): ScoreState {
-  const { type, payload } = action;
+  const { type } = action;
   switch (type) {
-    case ScoreActionType.INCREASE_PLAYER1_POINTS_BY_1:
+    case ScoreActionType.INCREASE_PLAYER_POINTS_BY_1: {
+      const player = action.payload.player;
       return {
         ...state,
-        player1: {
-          ...state.player1,
-          currentPoints: state.player1.currentPoints + 1,
+        [player]: {
+          ...state[player],
+          currentPoints: state[player].currentPoints + 1,
         },
       };
-    case ScoreActionType.DECREASE_PLAYER1_POINTS_BY_1:
-      let newPointsP1 = state.player1.currentPoints - 1;
-      if (newPointsP1 < 0) {
-        newPointsP1 = 0;
+    }
+    case ScoreActionType.DECREASE_PLAYER_POINTS_BY_1: {
+      const player = action.payload.player;
+      const newPoints =
+        state[player].currentPoints - 1 > 0
+          ? state[player].currentPoints - 1
+          : 0;
+
+      return {
+        ...state,
+        [player]: {
+          ...state[player],
+          currentPoints: newPoints,
+        },
+      };
+    }
+    case ScoreActionType.CHANGE_PLAYER_NAME: {
+      const player = action.payload.player;
+      return {
+        ...state,
+        [player]: {
+          ...state[player],
+          name: action.payload.name,
+        },
+      };
+    }
+    case ScoreActionType.END_SET:
+      {
+        const setWinnerPlayer = whoWonSet(
+          state.player1.currentPoints,
+          state.player2.currentPoints
+        );
+
+        if (setWinnerPlayer === null) {
+          return state;
+        }
+
+        const otherPlayer =
+          setWinnerPlayer === "player1" ? "player2" : "player1";
+
+        return {
+          ...state,
+          [setWinnerPlayer]: {
+            ...state[setWinnerPlayer],
+            wonSets: state[setWinnerPlayer].wonSets + 1,
+            currentPoints: 0,
+          },
+          [otherPlayer]: {
+            ...state[otherPlayer],
+            currentPoints: 0,
+          },
+          sets: [
+            ...state.sets,
+            [state.player1.currentPoints, state.player2.currentPoints],
+          ],
+        };
       }
-      return {
-        ...state,
-        player1: {
-          ...state.player1,
-          currentPoints: newPointsP1,
-        },
-      };
-    case ScoreActionType.CHANGE_PLAYER1_NAME:
-      return {
-        ...state,
-        player1: {
-          ...state.player1,
-          name: payload,
-        },
-      };
-    case ScoreActionType.INCREASE_PLAYER2_POINTS_BY_1:
-      return {
-        ...state,
-        player2: {
-          ...state.player2,
-          currentPoints: state.player2.currentPoints + 1,
-        },
-      };
-    case ScoreActionType.DECREASE_PLAYER2_POINTS_BY_1:
-      let newPointsP2 = state.player2.currentPoints - 1;
-      if (newPointsP2 < 0) {
-        newPointsP2 = 0;
-      }
-      return {
-        ...state,
-        player2: {
-          ...state.player2,
-          currentPoints: newPointsP2,
-        },
-      };
-    case ScoreActionType.CHANGE_PLAYER2_NAME:
       return {
         ...state,
         player2: {
