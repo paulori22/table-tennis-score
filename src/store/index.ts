@@ -95,44 +95,35 @@ export function scoreReducer(
         },
       };
     }
-    case ScoreActionType.END_SET:
-      {
-        const setWinnerPlayer = whoWonSet(
-          state.player1.currentPoints,
-          state.player2.currentPoints
-        );
+    case ScoreActionType.END_SET: {
+      const setWinnerPlayer = whoWonSet(
+        state.player1.currentPoints,
+        state.player2.currentPoints
+      );
 
-        if (setWinnerPlayer === null) {
-          return state;
-        }
-
-        const otherPlayer =
-          setWinnerPlayer === "player1" ? "player2" : "player1";
-
-        return {
-          ...state,
-          [setWinnerPlayer]: {
-            ...state[setWinnerPlayer],
-            wonSets: state[setWinnerPlayer].wonSets + 1,
-            currentPoints: 0,
-          },
-          [otherPlayer]: {
-            ...state[otherPlayer],
-            currentPoints: 0,
-          },
-          sets: [
-            ...state.sets,
-            [state.player1.currentPoints, state.player2.currentPoints],
-          ],
-        };
+      if (setWinnerPlayer === null) {
+        return state;
       }
+
+      const otherPlayer = setWinnerPlayer === "player1" ? "player2" : "player1";
+
       return {
         ...state,
-        player2: {
-          ...state.player2,
-          name: payload,
+        [setWinnerPlayer]: {
+          ...state[setWinnerPlayer],
+          wonSets: state[setWinnerPlayer].wonSets + 1,
+          currentPoints: 0,
         },
+        [otherPlayer]: {
+          ...state[otherPlayer],
+          currentPoints: 0,
+        },
+        sets: [
+          ...state.sets,
+          [state.player1.currentPoints, state.player2.currentPoints],
+        ],
       };
+    }
     default:
       return state;
   }
