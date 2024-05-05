@@ -56,7 +56,13 @@ export default function Home() {
             modal.handleCloseModal();
           },
         }}
-        cancelButton={{ text: "Não" }}
+        cancelButton={{
+          text: "Não",
+          onClick: () => {
+            dispatch({ type: ScoreActionType.CANCEL_END_SET });
+            modal.handleCloseModal();
+          },
+        }}
       />
     </main>
   );

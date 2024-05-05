@@ -5,6 +5,7 @@ export enum ScoreActionType {
   DECREASE_PLAYER_POINTS_BY_1 = "DECREASE_PLAYER_POINTS_BY_1",
   CHANGE_PLAYER_NAME = "CHANGE_PLAYER_NAME",
   END_SET = "END_SET",
+  CANCEL_END_SET = "CANCEL_END_SET",
 }
 
 export type ScoreAction =
@@ -22,6 +23,9 @@ export type ScoreAction =
     }
   | {
       type: ScoreActionType.END_SET;
+    }
+  | {
+      type: ScoreActionType.CANCEL_END_SET;
     };
 
 export interface PlayerScore {
@@ -122,6 +126,21 @@ export function scoreReducer(
           ...state.sets,
           [state.player1.currentPoints, state.player2.currentPoints],
         ],
+      };
+    }
+    case ScoreActionType.CANCEL_END_SET: {
+      console.log("Olá");
+      const whoHasHigherPoints =
+        state.player1.currentPoints > state.player2.currentPoints
+          ? "player1"
+          : "player2";
+
+      return {
+        ...state,
+        [whoHasHigherPoints]: {
+          ...state[whoHasHigherPoints],
+          currentPoints: state[whoHasHigherPoints].currentPoints - 1,
+        },
       };
     }
     default:
