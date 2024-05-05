@@ -36,7 +36,9 @@ const PlayerScore: React.FunctionComponent<PlayerScoreProps> = ({
           }
         />
       </div>
-      <div className="py-5">{isMyServer && <FaTableTennis size={30} />}</div>
+      <div className="py-5 h-5">
+        {isMyServer && <FaTableTennis size={30} />}
+      </div>
       <div className="flex flex-row place-items-center py-5">
         <div className="text-8xl">{playerScoreState.currentPoints}</div>
         <div className="text-8xl"> - </div>
