@@ -54,9 +54,9 @@ const PlayerScore: React.FunctionComponent<PlayerScoreProps> = ({
         <div className="text-8xl"> - </div>
         <div className="text-8xl">{playerScoreState.wonSets}</div>
       </div>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 items-center">
         <button
-          className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+          className="rounded w-40 h-20 bg-green-700 py-2 font-bold text-white hover:bg-green-900"
           onClick={() =>
             dispatch({
               type: ScoreActionType.INCREASE_PLAYER_POINTS_BY_1,
@@ -64,10 +64,10 @@ const PlayerScore: React.FunctionComponent<PlayerScoreProps> = ({
             })
           }
         >
-          + 1
+          <div className="text-2xl">+ 1</div>
         </button>
         <button
-          className="rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700"
+          className="rounded w-20 h-10 bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700"
           onClick={() =>
             dispatch({
               type: ScoreActionType.DECREASE_PLAYER_POINTS_BY_1,
@@ -75,7 +75,7 @@ const PlayerScore: React.FunctionComponent<PlayerScoreProps> = ({
             })
           }
         >
-          - 1
+          <div className="text-2xl">- 1</div>
         </button>
       </div>
     </div>
