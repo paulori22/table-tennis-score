@@ -5,7 +5,8 @@ import {
   ScoreActionType,
 } from "@/store";
 import { Dispatch } from "react";
-import { FaTableTennis, FaExchangeAlt } from "react-icons/fa";
+import { FaTableTennis } from "react-icons/fa";
+import SwitchButton from "./SwitchButton";
 
 export interface PlayerScoreProps {
   player: PlayerIdentifierType;
@@ -41,18 +42,11 @@ const PlayerScore: React.FunctionComponent<PlayerScoreProps> = ({
       <div className="flex flex-row place-content-center gap-3 py-5 h-5">
         {isMyServer && <FaTableTennis size={30} />}
         {isMyServer && isFirstPointOfMatch && (
-          <button
-            className="relative align-middle select-none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] text-xs bg-gray-900 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none rounded-full"
-            type="button"
+          <SwitchButton
             onClick={() =>
               dispatch({ type: ScoreActionType.SWITCH_START_SERVER_PLAYER })
             }
-          >
-            <FaExchangeAlt
-              className="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
-              size={30}
-            />
-          </button>
+          />
         )}
       </div>
       <div className="flex flex-row place-items-center py-5">

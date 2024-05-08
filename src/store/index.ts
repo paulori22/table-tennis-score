@@ -7,6 +7,7 @@ export enum ScoreActionType {
   END_SET = "END_SET",
   CANCEL_END_SET = "CANCEL_END_SET",
   SWITCH_START_SERVER_PLAYER = "SWITCH_START_SERVER_PLAYER",
+  SWITCH_PLAYER_SIDE = "SWITCH_PLAYER_SIDE",
 }
 
 export type ScoreAction =
@@ -30,6 +31,9 @@ export type ScoreAction =
     }
   | {
       type: ScoreActionType.SWITCH_START_SERVER_PLAYER;
+    }
+  | {
+      type: ScoreActionType.SWITCH_PLAYER_SIDE;
     };
 
 export interface PlayerScore {
@@ -43,6 +47,7 @@ export interface ScoreState {
   player2: PlayerScore;
   sets: Set[];
   startedServing: PlayerIdentifierType;
+  switchPlayerSide: boolean;
 }
 
 export type PlayerIdentifierType = "player1" | "player2";
@@ -60,6 +65,7 @@ export const INITIAL_SCORE_STATE: ScoreState = {
   },
   startedServing: "player1",
   sets: [],
+  switchPlayerSide: false,
 };
 
 export function scoreReducer(
@@ -165,6 +171,12 @@ export function scoreReducer(
       return {
         ...state,
         startedServing: serverPlayer,
+      };
+    }
+    case ScoreActionType.SWITCH_PLAYER_SIDE: {
+      return {
+        ...state,
+        switchPlayerSide: !state.switchPlayerSide,
       };
     }
     default:
