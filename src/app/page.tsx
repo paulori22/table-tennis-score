@@ -5,8 +5,9 @@ import PopUpModal from "@/components/PopModal";
 import SetsHistory from "@/components/SetsHistory";
 import useModal from "@/hooks/useModal";
 import { INITIAL_SCORE_STATE, ScoreActionType, scoreReducer } from "@/store";
-import { whoWillServe, whoWonSet } from "@/util";
+import { isFirstPointOfMatch, whoWillServe, whoWonSet } from "@/util";
 import { useEffect, useReducer } from "react";
+import { FaGear } from "react-icons/fa6";
 
 export default function Home() {
   const [state, dispatch] = useReducer(scoreReducer, INITIAL_SCORE_STATE);
@@ -19,6 +20,12 @@ export default function Home() {
     state.player1.currentPoints,
     state.player2.currentPoints
   );
+  const isFirstPointOfMatchResult = isFirstPointOfMatch(
+    state.player1.currentPoints,
+    state.player2.currentPoints,
+    state.sets.length
+  );
+
   const modal = useModal();
 
   useEffect(() => {
@@ -26,8 +33,6 @@ export default function Home() {
       modal.handleOpenModal();
     }
   }, [wonSetPlayer, modal]);
-
-  console.log(state);
 
   return (
     <main>
@@ -37,12 +42,14 @@ export default function Home() {
           playerScoreState={state.player1}
           dispatch={dispatch}
           serverPlayer={serverPlayer}
+          isFirstPointOfMatch={isFirstPointOfMatchResult}
         />
         <PlayerScore
           player="player2"
           playerScoreState={state.player2}
           dispatch={dispatch}
           serverPlayer={serverPlayer}
+          isFirstPointOfMatch={isFirstPointOfMatchResult}
         />
       </div>
       <SetsHistory sets={state.sets} />

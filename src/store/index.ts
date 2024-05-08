@@ -1,4 +1,4 @@
-import { whoWonSet } from "@/util";
+import { isFirstPointOfMatch, whoWonSet } from "@/util";
 
 export enum ScoreActionType {
   INCREASE_PLAYER_POINTS_BY_1 = "INCREASE_PLAYER_POINTS_BY_1",
@@ -6,6 +6,7 @@ export enum ScoreActionType {
   CHANGE_PLAYER_NAME = "CHANGE_PLAYER_NAME",
   END_SET = "END_SET",
   CANCEL_END_SET = "CANCEL_END_SET",
+  SWITCH_START_SERVER_PLAYER = "SWITCH_START_SERVER_PLAYER",
 }
 
 export type ScoreAction =
@@ -26,6 +27,9 @@ export type ScoreAction =
     }
   | {
       type: ScoreActionType.CANCEL_END_SET;
+    }
+  | {
+      type: ScoreActionType.SWITCH_START_SERVER_PLAYER;
     };
 
 export interface PlayerScore {
@@ -113,6 +117,8 @@ export function scoreReducer(
 
       return {
         ...state,
+        startedServing:
+          state.startedServing === "player1" ? "player2" : "player1",
         [setWinnerPlayer]: {
           ...state[setWinnerPlayer],
           wonSets: state[setWinnerPlayer].wonSets + 1,
@@ -129,7 +135,6 @@ export function scoreReducer(
       };
     }
     case ScoreActionType.CANCEL_END_SET: {
-      console.log("Olá");
       const whoHasHigherPoints =
         state.player1.currentPoints > state.player2.currentPoints
           ? "player1"
@@ -141,6 +146,25 @@ export function scoreReducer(
           ...state[whoHasHigherPoints],
           currentPoints: state[whoHasHigherPoints].currentPoints - 1,
         },
+      };
+    }
+    case ScoreActionType.SWITCH_START_SERVER_PLAYER: {
+      if (
+        !isFirstPointOfMatch(
+          state.player1.currentPoints,
+          state.player2.currentPoints,
+          state.sets.length
+        )
+      ) {
+        return state;
+      }
+
+      const serverPlayer =
+        state.startedServing === "player1" ? "player2" : "player1";
+
+      return {
+        ...state,
+        startedServing: serverPlayer,
       };
     }
     default:

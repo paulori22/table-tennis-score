@@ -30,3 +30,11 @@ export function whoWonSet(player1Points: number, player2Points: number) {
 
   return null;
 }
+
+export function isFirstPointOfMatch(
+  player1Points: number,
+  player2Points: number,
+  setsPlayed: number
+) {
+  return player1Points === 0 && player2Points === 0 && setsPlayed === 0;
+}

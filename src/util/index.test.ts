@@ -1,4 +1,4 @@
-import { setHasEnded, whoWillServe, whoWonSet } from ".";
+import { isFirstPointOfMatch, setHasEnded, whoWillServe, whoWonSet } from ".";
 
 test("Test whoWillServe Function (player1 starting to server) score bellow 10x10", () => {
   const serverPlayer = "player1";
@@ -59,4 +59,13 @@ test("Test whoWonSet function", () => {
   expect(whoWonSet(5, 11)).toBe("player2");
   expect(whoWonSet(11, 1)).toBe("player1");
   expect(whoWonSet(11, 6)).toBe("player1");
+});
+
+test("Test isFirstPointOfMatch function", () => {
+  expect(isFirstPointOfMatch(0, 0, 1)).toBe(false);
+  expect(isFirstPointOfMatch(1, 0, 0)).toBe(false);
+  expect(isFirstPointOfMatch(0, 1, 1)).toBe(false);
+  expect(isFirstPointOfMatch(1, 0, 1)).toBe(false);
+
+  expect(isFirstPointOfMatch(0, 0, 0)).toBe(true);
 });
