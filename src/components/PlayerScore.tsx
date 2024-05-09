@@ -35,10 +35,11 @@ const PlayerScore: React.FunctionComponent<PlayerScoreProps> = ({
           disabled={!isJudgeView}
           onChange={(e) => {
             if (isJudgeView) {
-              dispatch({
-                type: ScoreActionType.CHANGE_PLAYER_NAME,
-                payload: { player, name: e.target.value },
-              });
+              dispatch &&
+                dispatch({
+                  type: ScoreActionType.CHANGE_PLAYER_NAME,
+                  payload: { player, name: e.target.value },
+                });
             }
           }}
         />
@@ -48,6 +49,7 @@ const PlayerScore: React.FunctionComponent<PlayerScoreProps> = ({
         {isMyServer && isFirstPointOfMatch && isJudgeView && (
           <SwitchButton
             onClick={() =>
+              dispatch &&
               dispatch({ type: ScoreActionType.SWITCH_START_SERVER_PLAYER })
             }
           />
@@ -63,6 +65,7 @@ const PlayerScore: React.FunctionComponent<PlayerScoreProps> = ({
           <button
             className="rounded w-40 h-20 bg-green-700 py-2 font-bold text-white hover:bg-green-900"
             onClick={() =>
+              dispatch &&
               dispatch({
                 type: ScoreActionType.INCREASE_PLAYER_POINTS_BY_1,
                 payload: { player },
@@ -74,6 +77,7 @@ const PlayerScore: React.FunctionComponent<PlayerScoreProps> = ({
           <button
             className="rounded w-20 h-10 bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700"
             onClick={() =>
+              dispatch &&
               dispatch({
                 type: ScoreActionType.DECREASE_PLAYER_POINTS_BY_1,
                 payload: { player },

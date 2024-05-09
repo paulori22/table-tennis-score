@@ -94,12 +94,13 @@ const Score: React.FunctionComponent<ScoreProps> = ({ state, dispatch }) => {
                   const response = await scoreApi.post<{
                     matchId: string;
                   }>("match", state);
-                  dispatch({
-                    type: ScoreActionType.SET_MATCH_ID,
-                    payload: {
-                      matchId: response.data.matchId,
-                    },
-                  });
+                  dispatch &&
+                    dispatch({
+                      type: ScoreActionType.SET_MATCH_ID,
+                      payload: {
+                        matchId: response.data.matchId,
+                      },
+                    });
                 }
                 shareModal.handleOpenModal();
               }}
@@ -112,7 +113,7 @@ const Score: React.FunctionComponent<ScoreProps> = ({ state, dispatch }) => {
         <div className="flex flex-row justify-items-center justify-center h-5 gap-1 p-2">
           <SwitchButton
             onClick={() =>
-              dispatch({ type: ScoreActionType.SWITCH_PLAYER_SIDE })
+              dispatch && dispatch({ type: ScoreActionType.SWITCH_PLAYER_SIDE })
             }
           />
         </div>
@@ -133,14 +134,14 @@ const Score: React.FunctionComponent<ScoreProps> = ({ state, dispatch }) => {
           confirmationButton={{
             text: "Sim",
             onClick: () => {
-              dispatch({ type: ScoreActionType.END_SET });
+              dispatch && dispatch({ type: ScoreActionType.END_SET });
               modal.handleCloseModal();
             },
           }}
           cancelButton={{
             text: "Não",
             onClick: () => {
-              dispatch({ type: ScoreActionType.CANCEL_END_SET });
+              dispatch && dispatch({ type: ScoreActionType.CANCEL_END_SET });
               modal.handleCloseModal();
             },
           }}
