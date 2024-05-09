@@ -5,7 +5,7 @@ export const getBaseApiUrl = () => {
     return `http://${process.env.NEXT_PUBLIC_VERCEL_URL}/api`;
   }
 
-  return `https://${process.env.VERCEL_URL}/api`;
+  return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api`;
 };
 
 export const scoreApi = axios.create({
