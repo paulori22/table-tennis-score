@@ -8,6 +8,7 @@ export enum ScoreActionType {
   CANCEL_END_SET = "CANCEL_END_SET",
   SWITCH_START_SERVER_PLAYER = "SWITCH_START_SERVER_PLAYER",
   SWITCH_PLAYER_SIDE = "SWITCH_PLAYER_SIDE",
+  SET_MATCH_ID = "SET_MATCH_ID",
 }
 
 export type ScoreAction =
@@ -34,6 +35,10 @@ export type ScoreAction =
     }
   | {
       type: ScoreActionType.SWITCH_PLAYER_SIDE;
+    }
+  | {
+      type: ScoreActionType.SET_MATCH_ID;
+      payload: { matchId: string };
     };
 
 export interface PlayerScore {
@@ -43,6 +48,7 @@ export interface PlayerScore {
 }
 export type Set = [number, number];
 export interface ScoreState {
+  matchId: string | null;
   player1: PlayerScore;
   player2: PlayerScore;
   sets: Set[];
@@ -53,6 +59,7 @@ export interface ScoreState {
 export type PlayerIdentifierType = "player1" | "player2";
 
 export const INITIAL_SCORE_STATE: ScoreState = {
+  matchId: null,
   player1: {
     name: "Player 1",
     wonSets: 0,
@@ -177,6 +184,12 @@ export function scoreReducer(
       return {
         ...state,
         switchPlayerSide: !state.switchPlayerSide,
+      };
+    }
+    case ScoreActionType.SET_MATCH_ID: {
+      return {
+        ...state,
+        matchId: action.payload.matchId,
       };
     }
     default:

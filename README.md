@@ -13,4 +13,5 @@ TODO:
 - [x] Basic usage with score and set history
 - [x] Add option to select which player start server
 - [x] Add switch option to change player side on the screen
-- [ ] Online and share view of the score
+- [x] Online and share view of the score
+- [ ] Create option end match (reset sessionStorage state)
