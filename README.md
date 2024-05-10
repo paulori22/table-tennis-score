@@ -1,7 +1,8 @@
-This is a small project created with nextjs to track the points and the server of a table tennis match
-
-![image](https://github.com/paulori22/table-tennis-score/assets/20663434/70bf8b97-ec19-4996-9bec-e65cb60914d9)
-
+<p align="center">
+  This is a small project created with nextjs to track the points and the server of a table tennis match
+ <img src="https://github.com/paulori22/table-tennis-score/assets/20663434/ec05ed18-1262-415d-8ec1-4aa4e92d4a64">
+<p/>
+  
 Features:
 
 - Track the score of the match
