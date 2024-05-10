@@ -1,6 +1,15 @@
 This is a small project created with nextjs to track the points and the server of a table tennis match
 
-![image](https://github.com/paulori22/table-tennis-score/assets/20663434/d04364a8-083a-4d07-bcdf-83034ae66542)
+![image](https://github.com/paulori22/table-tennis-score/assets/20663434/70bf8b97-ec19-4996-9bec-e65cb60914d9)
+
+Features:
+- Track the score of the match
+- Choose what player will start serving
+  - Automatically change the server player after each set
+- Switch the player side
+- Share match online
+  - Copy link
+  - Whatapp link  
 
 Technologies used:
 
