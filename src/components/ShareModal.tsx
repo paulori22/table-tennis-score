@@ -1,6 +1,7 @@
 import { UseModalReturn } from "@/hooks/useModal";
 import { FaCopy, FaWhatsapp } from "react-icons/fa";
 import CloseIcon from "./CloseIcon";
+import { BASE_URL } from "@/util/http";
 
 export interface ShareModalProps
   extends Pick<UseModalReturn, "open" | "handleCloseModal"> {
@@ -15,9 +16,7 @@ const ShareModal: React.FunctionComponent<ShareModalProps> = ({
   const openClasses = "flex";
   const closeClasses = "hidden";
 
-  const matchLink = matchId
-    ? `http://${process.env.NEXT_PUBLIC_VERCEL_URL}/match/${matchId}`
-    : "";
+  const matchLink = matchId ? `${BASE_URL}/match/${matchId}` : "";
 
   return (
     <div
