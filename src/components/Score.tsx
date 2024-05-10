@@ -1,6 +1,6 @@
 import { ScoreAction, ScoreActionType, ScoreState } from "@/store";
 import { scoreApi } from "@/util/http";
-import { FaShareAlt } from "react-icons/fa";
+import { FaShareAlt, FaTrashAlt } from "react-icons/fa";
 import SwitchButton from "./SwitchButton";
 import SetsHistory from "./SetsHistory";
 import PopUpModal from "./PopModal";
@@ -37,6 +37,7 @@ const Score: React.FunctionComponent<ScoreProps> = ({ state, dispatch }) => {
 
   const modal = useModal();
   const shareModal = useModal();
+  const modalEndMatch = useModal();
 
   useEffect(() => {
     if (wonSetPlayer !== null && isJudgeView) {
@@ -80,7 +81,7 @@ const Score: React.FunctionComponent<ScoreProps> = ({ state, dispatch }) => {
     <PlayerScore key={1} {...player2ScoreProps} />,
   ];
   return (
-    <main>
+    <main className="container mx-auto">
       {isJudgeView && (
         <div className="flex flex-row-reverse justify-items-center h-5 gap-1 p-2">
           <button
@@ -127,6 +128,24 @@ const Score: React.FunctionComponent<ScoreProps> = ({ state, dispatch }) => {
         sets={state.sets}
         switchPlayerSide={state.switchPlayerSide}
       />
+
+      <div className="fixed bottom-0 left-0 z-50 w-full h-16">
+        <div className="flex flex-row-reverse justify-items-center h-5 gap-1 p-2">
+          {isJudgeView && (
+            <button
+              className="relative align-middle select-none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] text-xs bg-gray-900 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none rounded-full"
+              type="button"
+            >
+              <FaTrashAlt
+                className="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+                onClick={() => {
+                  modalEndMatch.handleOpenModal();
+                }}
+              />
+            </button>
+          )}
+        </div>
+      </div>
       {isJudgeView && (
         <PopUpModal
           {...modal}
@@ -143,6 +162,25 @@ const Score: React.FunctionComponent<ScoreProps> = ({ state, dispatch }) => {
             onClick: () => {
               dispatch && dispatch({ type: ScoreActionType.CANCEL_END_SET });
               modal.handleCloseModal();
+            },
+          }}
+        />
+      )}
+      {isJudgeView && (
+        <PopUpModal
+          {...modalEndMatch}
+          message="Você tem certeza que deseja encerrar a partida? Isso criará um nova partida"
+          confirmationButton={{
+            text: "Sim",
+            onClick: () => {
+              dispatch && dispatch({ type: ScoreActionType.END_MATCH });
+              modalEndMatch.handleCloseModal();
+            },
+          }}
+          cancelButton={{
+            text: "Não",
+            onClick: () => {
+              modalEndMatch.handleCloseModal();
             },
           }}
         />

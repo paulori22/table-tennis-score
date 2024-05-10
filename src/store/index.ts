@@ -9,6 +9,7 @@ export enum ScoreActionType {
   SWITCH_START_SERVER_PLAYER = "SWITCH_START_SERVER_PLAYER",
   SWITCH_PLAYER_SIDE = "SWITCH_PLAYER_SIDE",
   SET_MATCH_ID = "SET_MATCH_ID",
+  END_MATCH = "END_MATCH",
 }
 
 export type ScoreAction =
@@ -39,8 +40,10 @@ export type ScoreAction =
   | {
       type: ScoreActionType.SET_MATCH_ID;
       payload: { matchId: string };
+    }
+  | {
+      type: ScoreActionType.END_MATCH;
     };
-
 export interface PlayerScore {
   name: string;
   wonSets: number;
@@ -191,6 +194,9 @@ export function scoreReducer(
         ...state,
         matchId: action.payload.matchId,
       };
+    }
+    case ScoreActionType.END_MATCH: {
+      return INITIAL_SCORE_STATE;
     }
     default:
       return state;
